@@ -8,7 +8,7 @@ import pandas as pd
 import bodo
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def lexi_main(fname):
     """
     Simple word count example which returns a sorted count of words in "text" column of

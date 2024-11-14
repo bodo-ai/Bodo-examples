@@ -2,7 +2,9 @@
 Source: https://medium.com/rapids-ai/real-data-has-strings-now-so-do-gpus-994497d55f8e
 Analyze beer reviews to find most common words used in positive and negative reviews.
     Usage:
-    mpiexec -n [cores] python beer-reviews.py
+        python beer-reviews.py
+
+    Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 
 This example uses a sample reviews from S3 bucket (s3://bodo-example-data/beer/reviews_sample.csv).
 Fulldataset is available in S3 bucket (s3://bodo-example-data/beer/reviews.csv)
@@ -26,7 +28,7 @@ punc_regex = "|".join([f"({p})" for p in PUNCT_LIST])
 stopword_regex = "|".join([f"\\b({s})\\b" for s in STOPWORDS])
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def preprocess(reviews):
     # lowercase and strip
     reviews = reviews.str.lower()
@@ -38,7 +40,7 @@ def preprocess(reviews):
     return reviews
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def find_top_words(review_filename):
     # Load in the data
     t_start = time.time()

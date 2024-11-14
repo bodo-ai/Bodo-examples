@@ -2,3 +2,5 @@
 *.pq
 *.parquet
 .idea
+*.log
+__pycache__/

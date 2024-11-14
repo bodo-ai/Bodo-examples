@@ -4,7 +4,9 @@ NYC Green Taxi weekday daily pickup and dropoff in 2019
 Source: https://github.com/toddwschneider/nyc-taxi-data/blob/master/citibike_comparison/analysis/analysis_queries.sql
 
 Usage:
-    mpiexec -n [cores] python weekday_taxi_trips_by_pickup_and_dropoff.py
+    python weekday_taxi_trips_by_pickup_and_dropoff.py
+
+Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 
 Data source: Green Taxi 2019 s3://bodo-example-data/nyc-taxi/green_tripdata_2019.csv
 Full dataset: https://github.com/toddwschneider/nyc-taxi-data/blob/master/setup_files/raw_data_urls.txt
@@ -15,7 +17,7 @@ import time
 import bodo
 
 
-@bodo.jit(cache=True)
+@bodo.jit(spawn=True, cache=True)
 def get_weekday_trips():
     start = time.time()
     green_taxi = pd.read_csv(

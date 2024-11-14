@@ -58,9 +58,6 @@ mpijobs.kubeflow.org    2024-04-02T19:43:04Z
 4. Check the container arguments is referring to the python file you have intended to run
      ```shell
       args:
-         - mpirun
-         - -n
-         - "8"
          - python
          - /home/mpiuser/chicago_crimes.py
      ```

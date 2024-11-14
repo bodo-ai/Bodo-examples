@@ -2,7 +2,9 @@
 Source: https://github.com/JBlumstein/NYCParking/blob/master/NYC_Parking_Violations_Mapping_Example.ipynb
 NYC parking ticket violations
     Usage:
-    mpiexec -n [cores] python nyc-parking.py
+        python nyc-parking.py
+        
+    Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 
 Data for 2016 and 2017 is in S3 bucket (s3://bodo-example-data/nyc-parking-tickets)
 or you can get data from https://www.kaggle.com/new-york-city/nyc-parking-tickets
@@ -15,7 +17,7 @@ import bodo
 import os
 
 
-@bodo.jit(distributed=["many_year_df"], cache=True)
+@bodo.jit(spawn=True, distributed=["many_year_df"], cache=True)
 def load_parking_tickets():
     """
     Load data from S3 bucket and aggregate by day, violation type, and police precinct.
@@ -51,7 +53,7 @@ def load_parking_tickets():
 main_df = load_parking_tickets()
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_violation_precincts_codes(dir_path):
     """
     Load violation codes and precincts information.
@@ -74,7 +76,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 violation_codes, nyc_precincts_df = load_violation_precincts_codes(dir_path)
 
 
-@bodo.jit(distributed=["main_df"], cache=True)
+@bodo.jit(spawn=True, distributed=["main_df"], cache=True)
 def elim_code_36(main_df):
     """
     Remove undefined violations (code 36)
@@ -92,7 +94,7 @@ def elim_code_36(main_df):
 main_df = elim_code_36(main_df)
 
 
-@bodo.jit(distributed=["main_df"], cache=True)
+@bodo.jit(spawn=True, distributed=["main_df"], cache=True)
 def remove_outliers(main_df):
     """
     Delete entries that have dates outside our dataset dates
@@ -130,7 +132,7 @@ def merge_violation_code(main_df):
 main_df = merge_violation_code(main_df)
 
 
-@bodo.jit(distributed=["main_df"], cache=True)
+@bodo.jit(spawn=True, distributed=["main_df"], cache=True)
 def calculate_total_summons(main_df):
     """
     Calculate the total summonses in dollars for a violation in a precinct on a day
@@ -173,7 +175,7 @@ def calculate_total_summons(main_df):
 main_df = calculate_total_summons(main_df)
 
 
-@bodo.jit(distributed=["main_df", "precinct_offenses_df"], cache=True)
+@bodo.jit(spawn=True, distributed=["main_df", "precinct_offenses_df"], cache=True)
 def aggregate(main_df):
     """function that aggregates and filters data
     e.g. total violations by precinct

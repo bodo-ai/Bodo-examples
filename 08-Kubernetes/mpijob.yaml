@@ -20,9 +20,6 @@ spec:
               securityContext:
                 runAsUser: 1000
               args:
-                - mpirun
-                - -n
-                - "8"
                 - python
                 - /home/mpiuser/pi.py
 

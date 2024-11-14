@@ -1,7 +1,9 @@
 """
 TPC-H 22 Queries with Bodo
 Usage:
-    mpiexec -n [cores] python bodo_queries.py --folder [folder]
+    python bodo_queries.py --folder [folder]
+
+Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 """
 import time
 import argparse
@@ -9,7 +11,7 @@ import bodo
 import pandas as pd
 
 
-@bodo.jit(cache=True)
+@bodo.jit(spawn=True, cache=True)
 def run_queries(data_folder):
 
     # Load the data
@@ -51,7 +53,7 @@ def run_queries(data_folder):
     print("Total Query time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_lineitem(data_folder):
     data_path = data_folder + "/lineitem.pq"
     df = pd.read_parquet(
@@ -60,7 +62,7 @@ def load_lineitem(data_folder):
     return df
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_part(data_folder):
     data_path = data_folder + "/part.pq"
     df = pd.read_parquet(
@@ -69,7 +71,7 @@ def load_part(data_folder):
     return df
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_orders(data_folder):
     data_path = data_folder + "/orders.pq"
     df = pd.read_parquet(
@@ -78,7 +80,7 @@ def load_orders(data_folder):
     return df
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_customer(data_folder):
     data_path = data_folder + "/customer.pq"
     df = pd.read_parquet(
@@ -88,7 +90,7 @@ def load_customer(data_folder):
 
 
 # Nation is a very small file so set it to replicated
-@bodo.jit(distributed=False)
+@bodo.jit(spawn=True, distributed=False)
 def load_nation(data_folder):
     data_path = data_folder + "/nation.pq"
     df = pd.read_parquet(
@@ -98,7 +100,7 @@ def load_nation(data_folder):
 
 
 # Region is a very small file so set it to replicated
-@bodo.jit(distributed=False)
+@bodo.jit(spawn=True, distributed=False)
 def load_region(data_folder):
     data_path = data_folder + "/region.pq"
     df = pd.read_parquet(
@@ -107,7 +109,7 @@ def load_region(data_folder):
     return df
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_supplier(data_folder):
     data_path = data_folder + "/supplier.pq"
     df = pd.read_parquet(
@@ -116,7 +118,7 @@ def load_supplier(data_folder):
     return df
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def load_partsupp(data_folder):
     data_path = data_folder + "/partsupp.pq"
     df = pd.read_parquet(
@@ -125,7 +127,7 @@ def load_partsupp(data_folder):
     return df
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q01(lineitem):
     t1 = time.time()
     date = pd.Timestamp("1998-09-02")
@@ -181,7 +183,7 @@ def q01(lineitem):
     print("Q01 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q02(part, partsupp, supplier, nation, region):
     t1 = time.time()
     nation_filtered = nation.loc[:, ["N_NATIONKEY", "N_NAME", "N_REGIONKEY"]]
@@ -287,7 +289,7 @@ def q02(part, partsupp, supplier, nation, region):
     print("Q02 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q03(lineitem, orders, customer):
     t1 = time.time()
     date = pd.Timestamp("1995-03-04")
@@ -319,7 +321,7 @@ def q03(lineitem, orders, customer):
     print("Q03 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q04(lineitem, orders):
     t1 = time.time()
     date1 = pd.Timestamp("1993-11-01")
@@ -338,7 +340,7 @@ def q04(lineitem, orders):
     print("Q04 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q05(lineitem, orders, customer, nation, region, supplier):
     t1 = time.time()
     date1 = pd.Timestamp("1996-01-01")
@@ -361,7 +363,7 @@ def q05(lineitem, orders, customer, nation, region, supplier):
     print("Q05 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q06(lineitem):
     t1 = time.time()
     date1 = pd.Timestamp("1996-01-01")
@@ -382,7 +384,7 @@ def q06(lineitem):
     print("Q06 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q07_old(lineitem, supplier, orders, customer, nation):
     t1 = time.time()
     supplier_filtered = supplier.loc[:, ["S_SUPPKEY", "S_NATIONKEY"]]
@@ -437,7 +439,7 @@ def q07_old(lineitem, supplier, orders, customer, nation):
     print("Q07 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q07(lineitem, supplier, orders, customer, nation):
     """This version is faster than q07_old. Keeping the old one for reference"""
     t1 = time.time()
@@ -530,7 +532,7 @@ def q07(lineitem, supplier, orders, customer, nation):
     print("Q07 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q08(part, lineitem, supplier, orders, customer, nation, region):
     t1 = time.time()
     part_filtered = part[(part["P_TYPE"] == "ECONOMY ANODIZED STEEL")]
@@ -595,7 +597,7 @@ def q08(part, lineitem, supplier, orders, customer, nation, region):
     print("Q08 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q09(lineitem, orders, part, nation, partsupp, supplier):
     t1 = time.time()
     psel = part.P_NAME.str.contains("ghost")
@@ -617,7 +619,7 @@ def q09(lineitem, orders, part, nation, partsupp, supplier):
     print("Q09 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q10(lineitem, orders, customer, nation):
     t1 = time.time()
     date1 = pd.Timestamp("1994-11-01")
@@ -647,7 +649,7 @@ def q10(lineitem, orders, customer, nation):
     print("Q10 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q11(partsupp, supplier, nation):
     t1 = time.time()
     partsupp_filtered = partsupp.loc[:, ["PS_PARTKEY", "PS_SUPPKEY"]]
@@ -675,7 +677,7 @@ def q11(partsupp, supplier, nation):
     print("Q11 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q12(lineitem, orders):
     t1 = time.time()
     date1 = pd.Timestamp("1994-01-01")
@@ -704,7 +706,7 @@ def q12(lineitem, orders):
     print("Q12 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q13(customer, orders):
     t1 = time.time()
     customer_filtered = customer.loc[:, ["C_CUSTKEY"]]
@@ -726,7 +728,7 @@ def q13(customer, orders):
     print("Q13 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q14(lineitem, part):
     t1 = time.time()
     startDate = pd.Timestamp("1994-03-01")
@@ -747,7 +749,7 @@ def q14(lineitem, part):
     print("Q14 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q15(lineitem, supplier):
     t1 = time.time()
     lineitem_filtered = lineitem[
@@ -779,7 +781,7 @@ def q15(lineitem, supplier):
     print("Q15 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q16(part, partsupp, supplier):
     t1 = time.time()
     part_filtered = part[
@@ -815,7 +817,7 @@ def q16(part, partsupp, supplier):
     print("Q16 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q17(lineitem, part):
     t1 = time.time()
     left = lineitem.loc[:, ["L_PARTKEY", "L_QUANTITY", "L_EXTENDEDPRICE"]]
@@ -842,7 +844,7 @@ def q17(lineitem, part):
     print("Q17 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q18(lineitem, orders, customer):
     t1 = time.time()
     gb1 = lineitem.groupby("L_ORDERKEY", as_index=False)["L_QUANTITY"].sum()
@@ -858,7 +860,7 @@ def q18(lineitem, orders, customer):
     print("Q18 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q19(lineitem, part):
     t1 = time.time()
     Brand31 = "Brand#31"
@@ -934,7 +936,7 @@ def q19(lineitem, part):
     print("Q19 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q20(lineitem, part, nation, partsupp, supplier):
     t1 = time.time()
     date1 = pd.Timestamp("1996-01-01")
@@ -964,7 +966,7 @@ def q20(lineitem, part, nation, partsupp, supplier):
     print("Q20 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q21(lineitem, orders, supplier, nation):
     t1 = time.time()
     lineitem_filtered = lineitem.loc[
@@ -1031,7 +1033,7 @@ def q21(lineitem, orders, supplier, nation):
     print("Q21 Execution time (s): ", time.time() - t1)
 
 
-@bodo.jit
+@bodo.jit(spawn=True)
 def q22(customer, orders):
     t1 = time.time()
     customer_filtered = customer.loc[:, ["C_ACCTBAL", "C_CUSTKEY"]]
