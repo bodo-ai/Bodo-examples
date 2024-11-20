@@ -25,7 +25,6 @@ def get_weekday_trips():
         usecols=[1, 5, 6],
         parse_dates=["lpep_pickup_datetime"],
         dtype={
-            "lpep_pickup_datetime": "str",
             "PULocationID": "int64",
             "PULocationID": "int64",
         },

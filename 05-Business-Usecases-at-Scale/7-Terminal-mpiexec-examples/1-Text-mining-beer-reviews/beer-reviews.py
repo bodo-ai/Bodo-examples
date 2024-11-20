@@ -28,7 +28,7 @@ punc_regex = "|".join([f"({p})" for p in PUNCT_LIST])
 stopword_regex = "|".join([f"\\b({s})\\b" for s in STOPWORDS])
 
 
-@bodo.jit(spawn=True)
+@bodo.jit
 def preprocess(reviews):
     # lowercase and strip
     reviews = reviews.str.lower()
@@ -40,7 +40,7 @@ def preprocess(reviews):
     return reviews
 
 
-@bodo.jit(spawn=True)
+@bodo.jit
 def find_top_words(review_filename):
     # Load in the data
     t_start = time.time()

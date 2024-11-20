@@ -114,7 +114,7 @@ main_df = remove_outliers(main_df)
 
 
 @bodo.jit(distributed=["main_df"], cache=True)
-def merge_violation_code(main_df):
+def merge_violation_code(main_df, violation_codes):
     """
     Merge violation information in the main_df
     """
@@ -129,7 +129,7 @@ def merge_violation_code(main_df):
     return main_df
 
 
-main_df = merge_violation_code(main_df)
+main_df = merge_violation_code(main_df, violation_codes)
 
 
 @bodo.jit(spawn=True, distributed=["main_df"], cache=True)
