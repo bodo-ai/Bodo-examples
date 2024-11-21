@@ -20,11 +20,14 @@ spec:
               securityContext:
                 runAsUser: 1000
               args:
+                - mpirun
+                - -n
+                - "4"
                 - python
                 - /home/mpiuser/pi.py
 
     Worker:
-      replicas: 2
+      replicas: 1
       template:
         spec:
           # Replaced shared memory with an empty directory
