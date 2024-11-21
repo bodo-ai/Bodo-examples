@@ -17,7 +17,7 @@ import time
 import bodo
 
 
-@bodo.jit(spawn=True, cache=True)
+@bodo.jit(cache=True)
 def get_weekday_trips():
     start = time.time()
     green_taxi = pd.read_csv(

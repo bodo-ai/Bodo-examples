@@ -18,7 +18,7 @@ import pandas as pd
 import time
 
 
-@bodo.jit(spawn=True, cache=True)
+@bodo.jit(cache=True)
 def get_jfk_hourly_pickups():
     start = time.time()
     green_taxi = pd.read_csv(

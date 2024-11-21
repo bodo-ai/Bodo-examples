@@ -19,7 +19,7 @@ import pandas as pd
 import time
 
 
-@bodo.jit(spawn=True, cache=True)
+@bodo.jit(cache=True)
 def get_monthly_travels_weather():
     start = time.time()
     central_park_weather_observations = pd.read_csv(

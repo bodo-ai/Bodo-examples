@@ -18,7 +18,7 @@ import time
 import bodo
 
 
-@bodo.jit(spawn=True, cache=True)
+@bodo.jit(cache=True)
 def get_daily_pickups():
     start = time.time()
     green_taxi = pd.read_csv(
