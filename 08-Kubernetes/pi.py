@@ -1,6 +1,6 @@
 """
 Monte Carlo Pi Calculation example.
-    Usage: python pi.py --points [points]
+    Usage: mpiexec -n [cores] python pi.py --points [points]
 Similar to Spark's Pi example:
 https://github.com/apache/spark/blob/master/examples/src/main/python/pi.py
 """
@@ -10,7 +10,7 @@ import argparse
 import time
 
 
-@bodo.jit
+@bodo.jit(spawn=False)
 def calc_pi(n):
     t1 = time.time()
     x = 2 * np.random.ranf(n) - 1

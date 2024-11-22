@@ -22,12 +22,12 @@ spec:
               args:
                 - mpirun
                 - -n
-                - "4"
+                - "8"
                 - python
                 - /home/mpiuser/pi.py
 
     Worker:
-      replicas: 1
+      replicas: 2
       template:
         spec:
           # Replaced shared memory with an empty directory
