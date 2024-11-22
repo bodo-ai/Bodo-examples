@@ -2,7 +2,7 @@ FROM condaforge/mambaforge as build
 
 RUN conda install -y python=3.12 bodo=2024.10 mpich=4.1.2 -c bodo.ai -c conda-forge
 
-FROM mpioperator/intel:0.4.0
+FROM mpioperator/mpich:0.6.0
 
 COPY --from=build /opt/conda /opt/conda
 
