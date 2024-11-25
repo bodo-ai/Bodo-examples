@@ -1,5 +1,10 @@
 """
 Simple word count example which returns a sorted count of words after basic processing
+
+    Usage:
+        python beer-reviews.py
+
+    Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 """
 
 import time

@@ -2,7 +2,9 @@
 Source: https://medium.com/rapids-ai/real-data-has-strings-now-so-do-gpus-994497d55f8e
 Analyze beer reviews to find most common words used in positive and negative reviews.
     Usage:
-    mpiexec -n [cores] python beer-reviews.py
+        python beer-reviews.py
+
+    Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 
 This example uses a sample reviews from S3 bucket (s3://bodo-example-data/beer/reviews_sample.csv).
 Fulldataset is available in S3 bucket (s3://bodo-example-data/beer/reviews.csv)

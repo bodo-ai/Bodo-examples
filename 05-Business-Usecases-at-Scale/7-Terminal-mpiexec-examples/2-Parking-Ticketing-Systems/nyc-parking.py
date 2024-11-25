@@ -2,7 +2,9 @@
 Source: https://github.com/JBlumstein/NYCParking/blob/master/NYC_Parking_Violations_Mapping_Example.ipynb
 NYC parking ticket violations
     Usage:
-    mpiexec -n [cores] python nyc-parking.py
+        python nyc-parking.py
+        
+    Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 
 Data for 2016 and 2017 is in S3 bucket (s3://bodo-example-data/nyc-parking-tickets)
 or you can get data from https://www.kaggle.com/new-york-city/nyc-parking-tickets
@@ -112,7 +114,7 @@ main_df = remove_outliers(main_df)
 
 
 @bodo.jit(distributed=["main_df"], cache=True)
-def merge_violation_code(main_df):
+def merge_violation_code(main_df, violation_codes):
     """
     Merge violation information in the main_df
     """
@@ -127,7 +129,7 @@ def merge_violation_code(main_df):
     return main_df
 
 
-main_df = merge_violation_code(main_df)
+main_df = merge_violation_code(main_df, violation_codes)
 
 
 @bodo.jit(distributed=["main_df"], cache=True)

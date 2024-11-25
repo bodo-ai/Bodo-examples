@@ -4,7 +4,9 @@ NYC Green Taxi daily pickups in 2019
 Source: https://github.com/toddwschneider/nyc-taxi-data/blob/master/analysis/2017_update/queries_2017.sql
 
 Usage:
-    mpiexec -n [cores] python get_daily_pickups.py
+    python get_daily_pickups.py
+
+Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 
 Data source: Green Taxi 2019 s3://bodo-example-data/nyc-taxi/green_tripdata_2019.csv
 Full dataset: https://github.com/toddwschneider/nyc-taxi-data/blob/master/setup_files/raw_data_urls.txt
@@ -23,7 +25,7 @@ def get_daily_pickups():
         "s3://bodo-example-data/nyc-taxi/green_tripdata_2019.csv",
         usecols=[1, 5],
         parse_dates=["lpep_pickup_datetime"],
-        dtype={"lpep_pickup_datetime": "str", "PULocationID": "int64"},
+        dtype={"PULocationID": "int64"},
     )
     green_taxi["pickup_date"] = green_taxi["lpep_pickup_datetime"].dt.date
 

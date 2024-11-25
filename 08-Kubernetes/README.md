@@ -62,7 +62,7 @@ mpijobs.kubeflow.org    2024-04-02T19:43:04Z
          - -n
          - "8"
          - python
-         - /home/mpiuser/chicago_crimes.py
+         - /home/mpiuser/pi.py
      ```
 - Lastly, make sure `-n` is equal to `spec.mpiReplicaSpecs.Worker.replicas` multiplied by `spec.slotsPerWorker`, i.e. the total number of physical cores on your worker nodes.
 

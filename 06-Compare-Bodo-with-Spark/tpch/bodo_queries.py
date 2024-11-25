@@ -1,7 +1,9 @@
 """
 TPC-H 22 Queries with Bodo
 Usage:
-    mpiexec -n [cores] python bodo_queries.py --folder [folder]
+    python bodo_queries.py --folder [folder]
+
+Set the environment variable `BODO_NUM_WORKERS` to limit the number of cores used.
 """
 import time
 import argparse

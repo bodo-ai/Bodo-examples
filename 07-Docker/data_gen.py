@@ -1,7 +1,7 @@
 import pandas as pd
 import bodo
 
-@bodo.jit()
+@bodo.jit
 def read_parquet():
     df = pd.read_parquet("s3://bodo-example-data/nyc-taxi/yellow_tripdata_2019_half.pq")
     df.to_parquet("yellow_tripdata_2019_half.pq")
