@@ -23,7 +23,7 @@ If you wanted to run your application codes with your own data, please refer to 
 ## Modules outline
 
 
-[Modules 1](01-ETL-S3-Operational-Databases) and [2](02-ETL-Snowflake) focus on compute heavy data transformations through ETL applications. You will find examples with operational databases like PostgreSQL, Oracle, MySQL in module 01, a data warehouse like  Snowflake in module 02, and a data Lakehouse example with Iceberg in [module 03](05-ETL-S3-Dremio-Iceberg).
+[Modules 1](01-ETL-S3-Operational-Databases) and [2](02-ETL-Snowflake) focus on compute heavy data transformations through ETL applications. You will find examples with operational databases like PostgreSQL, Oracle, MySQL in module 01, a data warehouse like  Snowflake in module 02, and a data Lakehouse example with Iceberg in [module 03](03-ETL-Iceberg).
 
  Modules [04](04-ML-at-Scale) and [05](05-Business-Usecases-at-Scale) contain larger scale examples with [Machine Learning](04-ML-at-Scale), [Business use cases](05-Business-Usecases-at-Scale) (financial, transportation, etc.). Module [06](06-Compare-Bodo-with-Spark) contains a performance comparison of Bodo vs Spark on a set of queries derived from the TPC-H benchmark suite. 
 
